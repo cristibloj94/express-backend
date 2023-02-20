@@ -6,16 +6,16 @@ const users = require('../../Users')
 const idFilter = req => user => user?.id === parseInt(req?.params?.id);
 
 // Gets All Users
-router.get('/', (req, res) => res?.json(users));
+router.get('/', (req, res) => res?.json({ users }));
 
 // Get Single User
 router.get('/:id', (req, res) => {
     const found = users?.some(idFilter(req));
 
     if (found) {
-        res?.json(users?.filter(idFilter(req)));
+        res.json(users?.filter(idFilter(req)));
     } else {
-        res?.status(400).json({ msg: `No user with the id of ${req?.params?.id}` });
+        res.status(400).json({ msg: `No user with the id of ${req?.params?.id}` });
     }
 });
 
@@ -32,7 +32,7 @@ router.post('/', (req, res) => {
     }
 
     users?.push(newUser);
-    res?.json(users);
+    res.json(users);
 });
 
 // Update User
@@ -44,11 +44,11 @@ router.put('/:id', (req, res) => {
             if (idFilter(req)(user)) {
                 const updatedUser = { ...user, ...req?.body };
                 users[i] = updatedUser
-                res?.json({ msg: 'User updated successfully!', updatedUser });
+                res.json({ msg: 'User updated successfully!', updatedUser });
             }
         });
     } else {
-        res?.status(400).json({ msg: `No user with the id of ${req?.params?.id}` });
+        res.status(400).json({ msg: `No user with the id of ${req?.params?.id}` });
     }
 });
 
@@ -59,10 +59,10 @@ router.delete('/:id', (req, res) => {
     if (found) {
         res.json({
             msg: 'User deleted successfully!',
-            users: users?.filter(member => !idFilter(req)(member))
+            users: users?.filter(user => !idFilter(req)(user))
         });
     } else {
-        res.status(400).json({ msg: `No member with the id of ${req?.params?.id}` });
+        res.status(400).json({ msg: `No user with the id of ${req?.params?.id}` });
     }
 });
 
