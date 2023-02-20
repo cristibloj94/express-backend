@@ -1,5 +1,4 @@
 const express = require('express')
-const users = require('./Users')
 
 const app = express()
 
@@ -10,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // Homepage Route
-app.get('/', (req, res) => res.json(users))
+app.get('/', (req, res) => res.send('<h1>Hello from Express!</h1>'))
 
 // Members API Routes
 app.use('/api/users', require('./routes/api/users'));
