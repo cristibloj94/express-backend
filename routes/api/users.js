@@ -1,69 +1,52 @@
 const express = require('express')
-const uuid = require('uuid')
 const router = express.Router()
-const users = require('../../Users')
+const mongoose = require('mongoose')
+const User = require('../../models/User')
 
-const idFilter = req => user => user?.id === parseInt(req?.params?.id);
-
-// Gets All Users
-router.get('/', (req, res) => res?.json({ users }));
-
-// Get Single User
-router.get('/:id', (req, res) => {
-    const found = users?.some(idFilter(req));
-
-    if (found) {
-        res.json(users?.filter(idFilter(req)));
-    } else {
-        res.status(400).json({ msg: `No user with the id of ${req?.params?.id}` });
-    }
+// GET ALL USERS
+router.get('/', async (req, res) => {
+    try {
+        const users = await User?.find()
+        res.json(users)
+    } catch (err) { res.status(400).json({ message: err }) }
 });
 
-// Create User
-router.post('/', (req, res) => {
-    const newUser = {
-        ...req?.body,
-        id: uuid?.v4(),
-        status: 'active'
-    };
+// GET SPECIFIC USER
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await User?.findById(req.params.id)
+        res.json(user)
+    } catch (err) { res.status(400).json({ message: 'User not found!' }) }
+});
 
-    if (!newUser?.name || !newUser?.email) {
+// CREATE USER
+router.post('/', async (req, res) => {
+    const { name, email } = req.body
+    if (!name || !email) {
         return res.status(400).json({ msg: 'Please include a name and email' });
     }
 
-    users?.push(newUser);
-    res.json(users);
+    try {
+        const user = new User({ ...req.body })
+        const savedUser = await user?.save()
+        res.json(savedUser)
+    } catch (err) { res.status(400).json({ message: err }) }
 });
 
-// Update User
-router.put('/:id', (req, res) => {
-    const found = users?.some(idFilter(req));
-
-    if (found) {
-        users?.map((user, i) => {
-            if (idFilter(req)(user)) {
-                const updatedUser = { ...user, ...req?.body };
-                users[i] = updatedUser
-                res.json({ msg: 'User updated successfully!', updatedUser });
-            }
-        });
-    } else {
-        res.status(400).json({ msg: `No user with the id of ${req?.params?.id}` });
-    }
+// UPDATE USER
+router.patch('/:id', async (req, res) => {
+    try {
+        const updatedUser = await User?.updateOne({ _id: req.params.id }, { ...req.body })
+        res.json({ message: 'User updated successfully!' })
+    } catch (err) { res.status(400).json({ message: err }) }
 });
 
-// Delete Member
-router.delete('/:id', (req, res) => {
-    const found = users?.some(idFilter(req));
-
-    if (found) {
-        res.json({
-            msg: 'User deleted successfully!',
-            users: users?.filter(user => !idFilter(req)(user))
-        });
-    } else {
-        res.status(400).json({ msg: `No user with the id of ${req?.params?.id}` });
-    }
+// DELETE USER
+router.delete('/:id', async (req, res) => {
+    try {
+        const userToDelete = await User?.remove({ _id: req.params.id })
+        res.json({ message: 'User deleted successfully!' })
+    } catch (err) { res.status(400).json({ message: err }) }
 });
 
 module.exports = router
