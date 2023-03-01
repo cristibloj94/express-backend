@@ -94,5 +94,5 @@ app.post('/register', async (req, res) => {
 mongoose.set("strictQuery", false);
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () => console.log("Connected to DB!"))
 
-const PORT = process.env.AUTH_PORT || 7000
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`))
+const AUTH_PORT = process.env.AUTH_PORT || 7000
+app.listen(AUTH_PORT, () => console.log(`Server started on port ${AUTH_PORT}`))
