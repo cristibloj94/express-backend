@@ -12,11 +12,12 @@ app.use(express.json())
 app.get('/', (req, res) => res.send('<h1>Hello from Express!</h1>'))
 
 // API Routes
+app.use('/api/auth', require('./routes/api/auth'))
 app.use('/api/users', require('./routes/api/users'))
 app.use('/api/players', require('./routes/api/players'))
 
 // Connect to DB
-mongoose.set("strictQuery", false);
+mongoose.set("strictQuery", false)
 mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () => console.log("Connected to DB!"))
 
 const PORT = process.env.PORT || 5000

@@ -1,23 +1,17 @@
 const express = require('express')
-const app = express()
-const mongoose = require('mongoose')
-const cors = require('cors')
+const router = express.Router()
 const brcypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv/config')
-const User = require('./models/User')
-const Token = require('./models/Token')
-
-// Body Parser Middleware
-app.use(cors())
-app.use(express.json())
+const User = require('../../models/User')
+const Token = require('../../models/Token')
 
 const generateAccessToken = (user) => {
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10m' })
 }
 
 // TOKEN
-app.post('/token', async (req, res) => {
+router.post('/token', async (req, res) => {
     const refreshToken = req.body.token
     if (!refreshToken) return res.sendStatus(401)
 
@@ -34,7 +28,7 @@ app.post('/token', async (req, res) => {
 })
 
 // LOGOUT
-app.delete('/logout', async (req, res) => {
+router.delete('/logout', async (req, res) => {
     try {
         const token = await Token?.remove({ token: req.body.token })
         res.sendStatus(204)
@@ -42,7 +36,7 @@ app.delete('/logout', async (req, res) => {
 })
 
 // LOGIN
-app.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body
 
     const userItem = await User?.find({ email })?.lean()
@@ -76,7 +70,7 @@ app.post('/login', async (req, res) => {
 })
 
 // REGISTER
-app.post('/register', async (req, res) => {
+router.post('/register', async (req, res) => {
     const { email, password, name } = req.body
 
     if (!email || !password || !name) {
@@ -90,9 +84,4 @@ app.post('/register', async (req, res) => {
     } catch (err) { res.status(500).json({ message: 'Internal server error!' }) }
 })
 
-// Connect to DB
-mongoose.set("strictQuery", false);
-mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true }, () => console.log("Connected to DB!"))
-
-const AUTH_PORT = process.env.AUTH_PORT || 7000
-app.listen(AUTH_PORT, () => console.log(`Server started on port ${AUTH_PORT}`))
+module.exports = router
