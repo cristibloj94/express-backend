@@ -81,7 +81,7 @@ router.post('/register', async (req, res) => {
         const user = new User({ ...req.body, password: hashedPassword })
         const savedUser = await user?.save()
         res.json(savedUser)
-    } catch (err) { res.status(500).json({ message: 'Internal server error!' }) }
+    } catch (err) { res.status(500).json({ message: err }) }
 })
 
 module.exports = router
