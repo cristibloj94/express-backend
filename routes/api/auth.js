@@ -24,7 +24,7 @@ router.post('/token', async (req, res) => {
             const accessToken = generateAccessToken({ ...user })
             res.json({ accessToken: accessToken })
         })
-    } catch (err) { res.status(500).json({ message: 'Internal server error!' }) }
+    } catch (err) { res.status(500).json({ message: err }) }
 })
 
 // LOGOUT
@@ -32,7 +32,7 @@ router.delete('/logout', async (req, res) => {
     try {
         const token = await Token?.remove({ token: req.body.token })
         res.sendStatus(204)
-    } catch (err) { res.status(500).json({ message: 'Internal server error!' }) }
+    } catch (err) { res.status(500).json({ message: err }) }
 })
 
 // LOGIN
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
             return res.json({ success: true, accessToken, refreshToken })
         }
         else res.json({ success: false, message: 'Wrong password!' })
-    } catch (err) { res.status(500).json({ message: 'Internal server error!' }) }
+    } catch (err) { res.status(500).json({ message: err }) }
 })
 
 // REGISTER
