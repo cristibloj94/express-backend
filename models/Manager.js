@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const PlayerSchema = mongoose.Schema({
+const ManagerSchema = mongoose.Schema({
     name: { type: String, required: true },
     birthDate: { type: Date | undefined },
     nationalities: { type: Array, default: [] },
@@ -11,7 +11,6 @@ const PlayerSchema = mongoose.Schema({
     weight: { type: Number | undefined },
     cDate: { type: Date, default: Date.now },
     eDate: { type: Date, default: Date.now },
-    retired: { type: Boolean | undefined },
     img: { type: String | undefined },
     salary: { type: Number | undefined },
     agent: { type: String | undefined },
@@ -24,9 +23,8 @@ const PlayerSchema = mongoose.Schema({
     clubAwards: { type: Array, default: [] },
     internationalAwards: { type: Array, default: [] },
     nextMatch: { type: String | undefined },
-    marketValue: { type: Number | undefined },
-    allMarketValues: { type: Array, default: [] },
+    playerCareerStats: { type: Array, default: [] },
     status: { type: String, default: "ACTIVE" },
 })
 
-module.exports = mongoose.model('Players', PlayerSchema)
+module.exports = mongoose.model('Managers', ManagerSchema)

@@ -1,46 +1,46 @@
 const express = require('express')
 const router = express.Router()
-const Player = require('../../models/Player')
+const Manager = require('../../models/Manager')
 const authenticateToken = require('../../middleware/auth')
 
-// GET ALL PLAYERS
+// GET ALL MANAGERS
 router.get('/', authenticateToken, async (req, res) => {
     try {
-        const players = await Player?.find()
-        res.json(players)
+        const managers = await Manager?.find()
+        res.json(managers)
     } catch (err) { res.status(500).json({ message: err }) }
 });
 
-// GET SPECIFIC PLAYER
+// GET SPECIFIC MANAGER
 router.get('/:id', authenticateToken, async (req, res) => {
     try {
-        const player = await Player?.findById(req.params.id)
-        res.json(player)
+        const manager = await Manager?.findById(req.params.id)
+        res.json(manager)
     } catch (err) { res.status(500).json({ message: err }) }
 });
 
-// CREATE PLAYER
+// CREATE MANAGER
 router.post('/', authenticateToken, async (req, res) => {
     try {
-        const player = new Player({ ...req.body })
-        const savedPlayer = await player?.save()
-        res.json(savedPlayer)
+        const manager = new Manager({ ...req.body })
+        const savedManager = await manager?.save()
+        res.json(savedManager)
     } catch (err) { res.status(500).json({ message: err }) }
 });
 
-// UPDATE PLAYER
+// UPDATE MANAGER
 router.patch('/:id', authenticateToken, async (req, res) => {
     try {
-        const updatedPlayer = await Player?.updateOne({ _id: req.params.id }, { ...req.body })
-        res.json({ message: 'Player updated successfully!' })
+        const updatedManager = await Manager?.updateOne({ _id: req.params.id }, { ...req.body })
+        res.json({ message: 'Manager updated successfully!' })
     } catch (err) { res.status(500).json({ message: err }) }
 });
 
-// DELETE PLAYER
+// DELETE MANAGER
 router.delete('/:id', authenticateToken, async (req, res) => {
     try {
-        const playerToDelete = await Player?.remove({ _id: req.params.id })
-        res.json({ message: 'Player deleted successfully!' })
+        const managerToDelete = await Manager?.remove({ _id: req.params.id })
+        res.json({ message: 'Manager deleted successfully!' })
     } catch (err) { res.status(500).json({ message: err }) }
 });
 

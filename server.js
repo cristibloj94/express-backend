@@ -15,6 +15,12 @@ app.get('/', (req, res) => res.send('<h1>Hello from Express!</h1>'))
 app.use('/api/auth', require('./routes/api/auth'))
 app.use('/api/users', require('./routes/api/users'))
 app.use('/api/players', require('./routes/api/players'))
+app.use('/api/teams', require('./routes/api/teams'))
+app.use('/api/competitions', require('./routes/api/competitions'))
+app.use('/api/agents', require('./routes/api/agents'))
+app.use('/api/matches', require('./routes/api/matches'))
+app.use('/api/managers', require('./routes/api/managers'))
+app.use('/api/stadiums', require('./routes/api/stadiums'))
 
 // Connect to DB
 mongoose.set("strictQuery", false)
