@@ -63,7 +63,7 @@ router.post('/login', async (req, res) => {
             }
             else savedToken = await Token?.findOneAndUpdate({ email: user?.email }, { token: refreshToken })
 
-            return res.json({ success: true, accessToken, refreshToken })
+            return res.json({ success: true, email: user?.email, name: user?.name, accessToken, refreshToken })
         }
         else return res.status(400).json({ message: 'Wrong password!' })
     } catch (err) { return res.status(500).json({ message: err }) }
@@ -76,6 +76,11 @@ router.post('/register', async (req, res) => {
     if (!email || !password || !name) return res.status(400).json({ message: '{Email / password / name} are required!' })
 
     try {
+        const existingUserItem = await User?.find({ email })
+        const existingUser = existingUserItem?.[0]
+
+        if (existingUser) return res.status(400).json({ message: 'User with this email already exists!' })
+
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
         const user = new User({ ...req.body, password: hashedPassword })
         const savedUser = await user?.save()

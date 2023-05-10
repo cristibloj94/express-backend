@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const PlayerSchema = mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String | undefined },
     birthDate: { type: Date | undefined },
     nationalities: { type: Array, default: [] },
     city: { type: String | undefined },
